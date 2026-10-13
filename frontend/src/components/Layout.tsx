@@ -1,0 +1,14 @@
+import { Outlet, Link, useLocation } from 'react-router-dom';
+import { useAuthStore } from '@/hooks/useAuth';
+import { LayoutDashboard, GitBranch, ListChecks, FileText, GitMerge, CheckCircle, LogOut, Menu, X } from 'lucide-react';
+import { useState } from 'react';
+import { Button } from '@/components/ui/Button';
+
+const n = [{n:'Dashboard',h:'/dashboard',i:LayoutDashboard},{n:'Sessions',h:'/sessions',i:GitBranch},{n:'Decisions',h:'/decisions',i:ListChecks},{n:'PRDs',h:'/prds',i:FileText},{n:'Issues',h:'/issues',i:GitMerge},{n:'Verification',h:'/verification',i:CheckCircle}];
+
+export default function Layout() {
+  const { user, logout } = useAuthStore();
+  const l = useLocation();
+  const [o, setO] = useState(false);
+  return <div className="min-h-screen bg-slate-50"><aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-slate-200 transform transition-transform duration-200 lg:hidden ${o?'translate-x-0':'-translate-x-full'}`} aria-label="Sidebar"><div className="flex h-16 items-center justify-between px-4 border-b border-slate-200"><Link to="/dashboard" className="flex items-center gap-2 font-semibold text-slate-900"><span className="text-lg">⚙</span><span>Cobalt Forge</span></Link><button onClick={()=>setO(false)} className="lg:hidden p-2 text-slate-500 hover:text-slate-700" aria-label="Close"><X className="h-5 w-5"/></button></div><nav className="p-4 space-y-1" role="navigation" aria-label="Main">{n.map(x=>{const a=l.pathname.startsWith(x.h);return<Link key={x.n} to={x.h} onClick={()=>setO(false)} className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${a?'bg-primary-50 text-primary-700':'text-slate-600 hover:bg-slate-100 hover:text-slate-900'}`} aria-current={a?'page':undefined}><x.i className="h-5 w-5"/>{x.n}</Link>})}</nav></aside>{o&&<div className="fixed inset-0 z-40 bg-black/50 lg:hidden" onClick={()=>setO(false)}/>}<div className="lg:pl-64"><header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-slate-200 bg-white/80 backdrop-blur-sm px-4 lg:px-8"><button onClick={()=>setO(true)} className="lg:hidden p-2 text-slate-500 hover:text-slate-700" aria-label="Open"><Menu className="h-6 w-6"/></button><div className="flex-1"/><div className="flex items-center gap-4"><div className="hidden sm:flex items-center gap-2 text-sm text-slate-600"><span className="font-medium text-slate-900">{user?.name}</span><span className="px-2 py-0.5 text-xs rounded-full bg-primary-100 text-primary-700">{user?.role}</span></div><Button variant="ghost" size="sm" onClick={logout}><LogOut className="h-4 w-4"/><span className="hidden sm:inline">Logout</span></Button></div></header><main className="p-4 lg:p-8" role="main"><Outlet/></main></div></div>;
+}

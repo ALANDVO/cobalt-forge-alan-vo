@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "name": "cobalt-forge-alan-vo",
+  "owner": "ALANDVO",
+  "email": "alanvo@gmail.com",
+  "domain": "AI/ML developer tools",
+  "summary": "Work in progress: cobalt-forge-alan-vo",
+  "workflows": [
+    "Grilling sessions with frontier gate and pivot-first ordering create versioned decision records",
+    "PRD generation with full traceability matrix mapping decisions to user stories and acceptance criteria",
+    "Issue tracking with frontier visualization and completion signals tied to commit references",
+    "Verification coverage reports linking evidence back to original decisions"
+  ],
+  "auth": "oidc-keycloak-saml-broker",
+  "llm_providers": [
+    "openai-compatible",
+    "anthropic",
+    "gemini",
+    "ollama"
+  ],
+  "status": "work-in-progress"
+}
