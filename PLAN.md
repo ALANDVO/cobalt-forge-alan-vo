@@ -10,7 +10,7 @@ project-skeleton
 
 ### project-skeleton — Project skeleton with FastAPI backend and React frontend
 
-Status: in_progress
+Status: done
 
 Acceptance:
 - FastAPI app starts and serves health endpoint
@@ -18,6 +18,10 @@ Acceptance:
 - Docker compose starts backend, frontend, and Keycloak
 - SQLite database initializes with migrations
 - Basic OIDC authentication flow works
+
+Implementation: `backend/app/main.py`, `backend/app/core/database.py`, `backend/app/core/config.py`, `backend/app/api/routes.py`, `backend/app/api/routers/auth.py`, `backend/app/api/routers/sessions.py`, `backend/app/api/routers/decisions.py`, `backend/app/api/routers/issues.py`, `backend/app/api/routers/prds.py`, `backend/app/api/routers/verification.py`, `frontend/src/App.tsx`, `frontend/src/main.tsx`, `frontend/vite.config.ts`, `frontend/Dockerfile`, `frontend/nginx.conf`, `backend/Dockerfile`, `compose.yaml`, `keycloak/realm-export.json`
+
+Tests: `backend/app/tests/test_api.py`, `frontend/src/App.test.tsx`
 
 ### decision-ledger — Decision ledger engine for traceable requirements
 

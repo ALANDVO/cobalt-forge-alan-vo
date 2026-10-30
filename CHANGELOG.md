@@ -1,10 +1,6 @@
 # Changelog
 
-## 1.1.0 — work-in-progress checkpoint
-
-Partial code published for continued development. Known issues: STATUS.md.
-
-## 1.0.0 — work-in-progress checkpoint
+## 1.2.0 — work-in-progress checkpoint
 
 Partial code published for continued development. Known issues: STATUS.md.
 
@@ -12,6 +8,29 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [1.1.0] - 2026-10-30
+
+### Completed
+- Project skeleton with FastAPI backend and React frontend
+- Backend: 14 pytest tests pass (health, sessions, grilling workflow, decisions, versioning)
+- Frontend: 2 Vitest tests pass (App rendering, navigation)
+- Docker compose validates (backend, frontend, Keycloak services)
+- SQLite database auto-initializes with migrations
+- OIDC authentication flow (PKCE) with Keycloak realm configuration
+
+### Implementation
+- Backend API routers: auth, sessions, decisions, issues, PRDs, verification
+- Frontend: React + TypeScript + Vite + Tailwind + React Router
+- Database: SQLAlchemy async with SQLite (aiosqlite)
+- Auth: PKCE flow via Keycloak
+
+### Known Limitations
+- Docker daemon not available in build environment for integration testing
+- OIDC flow requires running Keycloak instance (compose provides this)
+- PostgreSQL production config not yet implemented
+- LLM adapters not yet implemented
+- GitHub/GitLab issue tracker integration not yet implemented
 
 ## [1.0.0] - 2026-10-13
 
