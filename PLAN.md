@@ -4,7 +4,7 @@ Each round completes one feature or repair. Future items are planned, not implem
 
 ## Current round
 
-project-skeleton
+decision-ledger
 
 ## Roadmap
 
@@ -25,7 +25,7 @@ Tests: `backend/app/tests/test_api.py`, `frontend/src/App.test.tsx`
 
 ### decision-ledger — Decision ledger engine for traceable requirements
 
-Status: planned
+Status: in_progress
 
 Acceptance:
 - Create/append decision records with stable IDs
@@ -33,6 +33,10 @@ Acceptance:
 - Version records on revision
 - Query ledger by ID, status, tags
 - Coverage check: all records referenced in PRD/issues
+
+Implementation: `backend/app/api/routers/decisions.py`, `backend/app/services/decision_service.py`, `backend/app/models/decision.py`, `frontend/src/pages/Decisions.tsx`, `frontend/src/hooks/useDecisions.ts`
+
+Tests: `backend/app/tests/test_api.py`
 
 ### grilling-workflow — Grilling workflow with frontier/pivot ordering
 
