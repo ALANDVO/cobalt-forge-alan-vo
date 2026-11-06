@@ -29,6 +29,15 @@ class DC(BaseModel):
     constraints: str = ""
     tags: str = ""
 
+class DU(BaseModel):
+    question: str | None = None
+    answer: str | None = None
+    normalized_requirement: str | None = None
+    constraints: str | None = None
+    tags: str | None = None
+    status: str | None = None
+    change_reason: str = ""
+
 class DR(BaseModel):
     id: uuid.UUID
     stable_id: str
@@ -53,7 +62,7 @@ async def create_d(data: DC, u: User = Depends(get_user), db: AsyncSession = Dep
     return await DecisionService(db).create(s.id, u.id, data.question, data.answer, data.normalized_requirement, data.constraints, data.tags)
 
 @router.get("", response_model=List[DR])
-async def list_d(sid: Optional[uuid.UUID] = None, u: User = Depends(get_user), db: AsyncSession = Depends(get_db)):
+async def list_d(sid: Optional[uuid.UUID] = None, status: Optional[str] = None, tags: Optional[str] = None, u: User = Depends(get_user), db: AsyncSession = Depends(get_db)):
     if not sid:
         from sqlalchemy import select
         from app.models.session import GrillingSession, SessionStatus
@@ -61,11 +70,19 @@ async def list_d(sid: Optional[uuid.UUID] = None, u: User = Depends(get_user), d
         s = r.scalar_one_or_none()
         if not s: return []
         sid = s.id
-    return await DecisionService(db).list(sid)
+    st = DecisionStatus(status) if status else None
+    return await DecisionService(db).list(sid, st, tags)
 
 @router.get("/{did}", response_model=DR)
 async def get_d(did: uuid.UUID, u: User = Depends(get_user), db: AsyncSession = Depends(get_db)):
     d = await DecisionService(db).get(did)
+    if not d: raise HTTPException(404, "Not found")
+    return d
+
+@router.patch("/{did}", response_model=DR)
+async def update_d(did: uuid.UUID, data: DU, u: User = Depends(get_user), db: AsyncSession = Depends(get_db)):
+    st = DecisionStatus(data.status) if data.status else None
+    d = await DecisionService(db).update(did, u.id, data.question, data.answer, data.normalized_requirement, data.constraints, data.tags, st, data.change_reason)
     if not d: raise HTTPException(404, "Not found")
     return d
 

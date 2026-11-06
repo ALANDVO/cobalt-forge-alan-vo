@@ -28,9 +28,15 @@ class DecisionService:
         r = await self.db.execute(select(DecisionRecord).options(selectinload(DecisionRecord.versions)).where(DecisionRecord.id == did))
         return r.scalar_one_or_none()
 
-    async def list(self, sid: uuid.UUID, st: Optional[DecisionStatus] = None) -> List[DecisionRecord]:
+    async def list(self, sid: uuid.UUID, st: Optional[DecisionStatus] = None, tags: Optional[str] = None) -> List[DecisionRecord]:
         q = select(DecisionRecord).where(DecisionRecord.session_id == sid)
         if st: q = q.where(DecisionRecord.status == st)
+        if tags:
+            tag_list = [tag.strip() for tag in tags.split(",") if tag.strip()]
+            if tag_list:
+                from sqlalchemy import or_
+                tag_conditions = [DecisionRecord.tags.ilike(f"%{tag}%") for tag in tag_list]
+                q = q.where(or_(*tag_conditions))
         q = q.order_by(DecisionRecord.created_at)
         r = await self.db.execute(q)
         return list(r.scalars().all())
