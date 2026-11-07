@@ -79,3 +79,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - SAML broker configuration testing
 - WebSocket support for real-time collaboration
 - Export/import for decision ledger portability
+
+---
+
+Alan Vo · [alanvo.net](https://alanvo.net)

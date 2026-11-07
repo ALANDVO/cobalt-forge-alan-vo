@@ -89,3 +89,6 @@ Acceptance:
 - Web-based UI works in desktop webview
 - Offline-capable core workflows
 
+---
+
+Alan Vo · [alanvo.net](https://alanvo.net)
