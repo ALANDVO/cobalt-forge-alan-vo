@@ -25,7 +25,7 @@ Tests: `backend/app/tests/test_api.py`, `frontend/src/App.test.tsx`
 
 ### decision-ledger — Decision ledger engine for traceable requirements
 
-Status: in_progress
+Status: done
 
 Acceptance:
 - Create/append decision records with stable IDs
