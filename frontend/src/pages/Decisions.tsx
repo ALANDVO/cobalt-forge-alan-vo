@@ -1,10 +1,25 @@
 import { useDecisionsStore } from '@/hooks/useDecisions';
+import { useSessionsStore } from '@/hooks/useSessions';
+import { useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 
 export default function Decisions() {
-  const { decisions, fetchDecisions, isLoading, error, coverage } = useDecisionsStore();
+  const { decisions, fetchDecisions, isLoading, error, coverage, getCoverage } = useDecisionsStore();
+  const { sessions, fetchSessions } = useSessionsStore();
+
+  useEffect(() => {
+    fetchSessions().then(() => {
+      const activeSession = sessions.find(s => s.status === 'active');
+      if (activeSession) {
+        fetchDecisions(activeSession.id);
+        getCoverage(activeSession.id);
+      } else {
+        fetchDecisions('');
+      }
+    });
+  }, [fetchSessions, fetchDecisions, getCoverage, sessions]);
 
   const r = decisions.filter(d => d.status === 'resolved').length;
   const t = decisions.length;
@@ -16,7 +31,15 @@ export default function Decisions() {
           <h1 className="text-3xl font-bold text-slate-900">Decision Ledger</h1>
           <p className="text-slate-600 mt-1">View and manage decision records</p>
         </div>
-        <Button onClick={() => fetchDecisions('')}>Refresh</Button>
+        <Button onClick={() => {
+          const activeSession = sessions.find(s => s.status === 'active');
+          if (activeSession) {
+            fetchDecisions(activeSession.id);
+            getCoverage(activeSession.id);
+          } else {
+            fetchDecisions('');
+          }
+        }}>Refresh</Button>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
