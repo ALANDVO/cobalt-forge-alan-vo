@@ -1,0 +1,5 @@
+
+### grilling-workflow
+- Updated frontend SessionDetail component to display design_tree
+- Verified pivot-first ordering in backend compute_frontier function
+- UI now shows design tree when available in grilling sessions Verify STATUS.md was updatednhead -n 20 STATUS.mdn
