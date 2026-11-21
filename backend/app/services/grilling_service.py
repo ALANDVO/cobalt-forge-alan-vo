@@ -82,9 +82,10 @@ class GrillingService:
         await self.db.refresh(a)
         return a
 
-    async def complete_session(self, sid: uuid.UUID) -> Optional[GrillingSession]:
+    async def complete_session(self, sid: uuid.UUID, confirmed: bool = False) -> Optional[GrillingSession]:
         s = await self.db.get(GrillingSession, sid)
         if not s: return None
+        if not confirmed: raise ValueError("Session completion requires explicit confirmation")
         r = await self.db.execute(select(func.count(GrillingQuestion.id)).where(GrillingQuestion.session_id == sid, GrillingQuestion.status == QuestionStatus.PENDING))
         if (r.scalar() or 0) > 0: raise ValueError("Pending questions remain")
         s.status = SessionStatus.COMPLETED
