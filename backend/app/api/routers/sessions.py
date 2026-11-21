@@ -143,8 +143,8 @@ async def va(aid: uuid.UUID, x: User = Depends(u), db: AsyncSession = Depends(ge
     return a
 
 @router.post("/{sid}/comp", response_model=SR)
-async def cs(sid: uuid.UUID, x: User = Depends(u), db: AsyncSession = Depends(get_db)):
-    s = await GrillingService(db).complete_session(sid)
+async def cs(sid: uuid.UUID, confirmed: bool = False, x: User = Depends(u), db: AsyncSession = Depends(get_db)):
+    s = await GrillingService(db).complete_session(sid, confirmed=confirmed)
     if not s: raise HTTPException(400, "Cannot complete")
     return s
 
