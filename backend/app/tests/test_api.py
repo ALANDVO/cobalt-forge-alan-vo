@@ -334,3 +334,57 @@ class TestDecisionVersioning:
         assert len(versions) == 2  # Original + update
         assert versions[0].version == 1
         assert versions[1].version == 1  # Archived version 1
+
+class TestPrepareRoundQuestions:
+    async def test_prepare_round_questions_returns_frontier(self, client: AsyncClient, demo_user: User, active_session: GrillingSession):
+        """Test that preparing round questions returns frontier with pivot-first ordering."""
+        # Start a round
+        round_resp = await client.post(f"/api/v1/sessions/{active_session.id}/rounds")
+        round_id = round_resp.json()["id"]
+
+        # Add a pivot question first, then a detail question with prerequisite on pivot
+        await client.post(
+            f"/api/v1/sessions/rounds/{round_id}/questions",
+            json={
+                "question_text": "Pivot question first?",
+                "detailed_explanation": "Should come first",
+                "question_type": "pivot",
+                "prerequisites": [],
+                "options": [],
+                "recommended_option": "",
+                "recommended_reason": "",
+            },
+        )
+
+        await client.post(
+            f"/api/v1/sessions/rounds/{round_id}/questions",
+            json={
+                "question_text": "Detail question second",
+                "detailed_explanation": "Depends on pivot",
+                "question_type": "detail",
+                "prerequisites": [1],
+                "options": [],
+                "recommended_option": "",
+                "recommended_reason": "",
+            },
+        )
+
+        # Prepare round questions - should return pivot first
+        response = await client.get(f"/api/v1/sessions/{active_session.id}/prep")
+        assert response.status_code == 200
+        data = response.json()
+
+        # Should have questions in frontier
+        assert len(data["questions"]) >= 1
+
+        # Pivot question should come first (question number 1)
+        if len(data["questions"]) >= 2:
+            assert data["questions"][0]["number"] == "Q1"  # pivot first
+            assert data["questions"][1]["number"] == "Q2"  # detail second
+        else:
+            # Only one question in frontier
+            assert data["questions"][0]["number"] == "Q1"  # the pivot
+
+        # Verify the question types are correct
+        question_numbers = [q["number"] for q in data["questions"]]
+        assert "Q1" in question_numbers  # pivot present

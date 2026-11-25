@@ -40,7 +40,7 @@ Tests: `backend/app/tests/test_api.py`
 
 ### grilling-workflow — Grilling workflow with frontier/pivot ordering
 
-Status: planned
+Status: in_progress
 
 Acceptance:
 - Start grilling session with design tree
@@ -48,6 +48,10 @@ Acceptance:
 - Record answers as decision ledger entries
 - Support assumptions with veto capability
 - Exit gate requires explicit 'confirmed'
+
+Implementation: `backend/app/services/grilling_service.py`, `backend/app/api/routers/sessions.py`
+
+Tests: `backend/app/tests/test_api.py::TestPrepareRoundQuestions`
 
 ### prd-generation — PRD generation with decision traceability
 
